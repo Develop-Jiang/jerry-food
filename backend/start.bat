@@ -10,7 +10,7 @@ cd /d "%~dp0"
 echo [1/3] 检查Java环境...
 java -version >nul 2>&1
 if errorlevel 1 (
-    echo ❌ 错误：未找到Java环境，请先安装JDK 11+
+    echo ❌ 错误：未找到Java环境，请先安装JDK 1.8+
     pause
     exit /b 1
 )

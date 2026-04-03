@@ -17,7 +17,7 @@
 
 | 软件 | 版本要求 | 用途 |
 |------|---------|------|
-| JDK | 11+ | 运行Java后端 |
+| JDK | 1.8+ (Java 8) | 运行Java后端 |
 | Maven | 3.6+ | 构建项目 |
 | MySQL | 8.0+ | 数据存储 |
 | Node.js | 16+ | 前端服务（可选） |
@@ -324,7 +324,7 @@ CREATE INDEX idx_clothing_favorite ON clothing(favorite);
 
 部署前请确认：
 
-- [ ] JDK 11+ 已安装
+- [ ] JDK 1.8+ (Java 8) 已安装
 - [ ] Maven 3.6+ 已安装  
 - [ ] MySQL 8.0+ 已安装并启动
 - [ ] 数据库已初始化（执行init.sql）
