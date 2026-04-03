@@ -92,8 +92,33 @@
         </dependencies>
     </dependencyManagement>
 
+    <!--
+    ============================================================
+       仓库配置说明（混合模式）
+    ============================================================
+    
+    优先级顺序：
+    1. 公司内网 Nexus 私服 (settings.xml中的mirror配置)
+       - 地址: http://10.19.83.146:8081/nexus/repository/maven-group/
+       - 适用于: 公司内网环境
+    
+    2. 阿里云公共仓库 (下方配置)
+       - 地址: https://maven.aliyun.com/repository/public
+       - 适用于: 外网环境 / 公司私服不可用时
+    
+    3. Spring 官方仓库 (下方配置)
+       - 地址: https://repo.spring.io/milestone
+       - 用于: Spring Boot/Cloud 特有依赖
+    
+    本项目采用混合模式，确保在任何网络环境下都能正常构建！
+    -->
+    
     <repositories>
-        <!-- 阿里云公共仓库 -->
+        <!-- 
+            阿里云公共仓库（备用仓库 #1）
+            包含: Maven Central + JCenter + Google + Gradle Plugin
+            速度: 极快（国内推荐）
+        -->
         <repository>
             <id>aliyunmaven</id>
             <name>阿里云公共仓库</name>
@@ -106,11 +131,30 @@
             </snapshots>
         </repository>
         
-        <!-- Spring仓库 -->
+        <!-- 
+            Spring 官方里程碑仓库（备用仓库 #2）
+            用于下载 Spring Boot / Spring Cloud 相关依赖
+        -->
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+        <!-- 
+            Maven 中央仓库（兜底仓库）
+            当以上所有仓库都不可用时使用
+        -->
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
