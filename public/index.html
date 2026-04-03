@@ -537,20 +537,160 @@
     </div>
 
     <script>
-        function openWardrobe() {
+        // ============================================================
+        // 后端API地址配置
+        // ============================================================
+        const API_BASE_URL = 'http://localhost:8080/api';
+        let currentHomeId = 1; // 默认家庭ID
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏠 页面加载完成，开始初始化...');
+            initPage();
+        });
+
+        // 初始化页面数据
+        async function initPage() {
+            try {
+                // 获取家庭信息
+                await loadHomeInfo();
+                console.log('✅ 页面初始化完成');
+            } catch (error) {
+                console.error('❌ 初始化失败:', error);
+                showErrorMessage('后端服务连接失败，请确保后端已启动 (http://localhost:8080)');
+            }
+        }
+
+        // 加载家庭信息
+        async function loadHomeInfo() {
+            const response = await fetch(`${API_BASE_URL}/home/info`);
+            const result = await response.json();
+            
+            if (result.code === 200 && result.data) {
+                const homeInfo = result.data;
+                currentHomeId = homeInfo.id;
+                
+                // 更新标题为动态的家庭名称
+                document.querySelector('.home-title').textContent = `🏠 ${homeInfo.homeName || '我的温馨小家'}`;
+                
+                console.log(`📋 家庭信息加载成功: ${homeInfo.homeName}`);
+            }
+        }
+
+        // 打开衣柜弹窗并加载数据
+        async function openWardrobe() {
             document.getElementById('wardrobeModal').classList.add('show');
+            
+            try {
+                // 从后端API获取衣物列表
+                const response = await fetch(`${API_BASE_URL}/clothing/list?homeId=${currentHomeId}`);
+                const result = await response.json();
+                
+                if (result.code === 200 && result.data) {
+                    renderClothingList('wardrobeItems', result.data);
+                    console.log(`👗 衣柜数据加载成功: ${result.data.length}件衣物`);
+                } else {
+                    throw new Error(result.message || '获取衣柜数据失败');
+                }
+            } catch (error) {
+                console.error('❌ 加载衣柜数据失败:', error);
+                // 显示默认数据作为降级方案
+                renderDefaultWardrobeData();
+            }
+        }
+
+        // 打开冰箱弹窗（暂时显示示例数据）
+        function openFridge() {
+            document.getElementById('fridgeModal').classList.add('show');
+            // 冰箱功能可以后续扩展
+            console.log('🧊 冰箱功能开发中...');
         }
 
         function closeWardrobe() {
             document.getElementById('wardrobeModal').classList.remove('show');
         }
 
-        function openFridge() {
-            document.getElementById('fridgeModal').classList.add('show');
-        }
-
         function closeFridge() {
             document.getElementById('fridgeModal').classList.remove('show');
+        }
+
+        // 渲染衣物列表到弹窗
+        function renderClothingList(containerId, clothingList) {
+            const container = document.querySelector(`#${containerId} .item-grid`);
+            container.innerHTML = ''; // 清空现有内容
+            
+            if (clothingList.length === 0) {
+                container.innerHTML = '<div style="grid-column: span 3; text-align: center; color: #999;">暂无衣物</div>';
+                return;
+            }
+            
+            clothingList.forEach(item => {
+                const categoryEmoji = getCategoryEmoji(item.category);
+                const itemHtml = `
+                    <div class="item">
+                        <span class="item-icon">${categoryEmoji}</span>
+                        <span class="item-name">${item.name || '未命名'}</span>
+                        <span class="item-count">${item.category || '未分类'}</span>
+                        ${item.imageUrl ? `<img src="${item.imageUrl}" style="width:100%;max-height:100px;object-fit:cover;margin-top:8px;border-radius:8px;" onerror="this.style.display='none'">` : ''}
+                    </div>
+                `;
+                container.innerHTML += itemHtml;
+            });
+        }
+
+        // 根据分类返回对应的emoji图标
+        function getCategoryEmoji(category) {
+            const emojiMap = {
+                '衬衫': '👔',
+                'T恤': '👕',
+                '外套': '🧥',
+                '裤子': '👖',
+                '连衣裙': '👗',
+                '裙子': '👗',
+                '配饰': '🧣',
+                '围巾': '🧣',
+                '鞋子': '👟',
+                '内衣': '🩲',
+                '泳衣': '👙'
+            };
+            return emojiMap[category] || '👕'; // 默认T恤图标
+        }
+
+        // 渲染默认的衣柜数据（降级方案）
+        function renderDefaultWardrobeData() {
+            const defaultData = [
+                { name: '白色衬衫', category: '衬衫', icon: '👔' },
+                { name: '蓝色T恤', category: 'T恤', icon: '👕' },
+                { name: '黑色外套', category: '外套', icon: '🧥' },
+                { name: '牛仔裤', category: '裤子', icon: '👖' },
+                { name: '碎花连衣裙', category: '连衣裙', icon: '👗' },
+                { name: '羊毛围巾', category: '配饰', icon: '🧣' }
+            ];
+            
+            const container = document.querySelector('#wardrobeItems .item-grid');
+            container.innerHTML = '';
+            
+            defaultData.forEach(item => {
+                const itemHtml = `
+                    <div class="item">
+                        <span class="item-icon">${item.icon}</span>
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-count">${item.category}</span>
+                    </div>
+                `;
+                container.innerHTML += itemHtml;
+            });
+            
+            console.log('⚠️ 使用默认演示数据');
+        }
+
+        // 显示错误消息
+        function showErrorMessage(message) {
+            const hintDiv = document.querySelector('.hint-text');
+            if (hintDiv) {
+                hintDiv.textContent = message;
+                hintDiv.style.color = '#ff4444';
+            }
         }
 
         // ESC键关闭弹窗
@@ -560,6 +700,34 @@
                 closeFridge();
             }
         });
+
+        // ============================================================
+        // API测试函数（可在控制台调用）
+        // ============================================================
+        
+        // 测试：获取所有衣物
+        window.testGetAllClothing = async function() {
+            const response = await fetch(`${API_BASE_URL}/clothing/list?homeId=${currentHomeId}`);
+            const data = await response.json();
+            console.log('📦 所有衣物:', data);
+            return data;
+        };
+
+        // 测试：添加新衣物
+        window.testAddClothing = async function(clothingData) {
+            const formData = new FormData();
+            Object.keys(clothingData).forEach(key => {
+                formData.append(key, clothingData[key]);
+            });
+            
+            const response = await fetch(`${API_BASE_URL}/clothing/add`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            console.log('➕ 添加结果:', data);
+            return data;
+        };
     </script>
 </body>
 </html>
