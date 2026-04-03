@@ -1,12 +1,94 @@
-<view class="container">
-  <view class="title">欢迎使用 Jerry Food</view>
-  <view class="text">这是一个微信小程序的基础框架</view>
-  <view class="text">你可以通过本地服务器访问并在手机上查看</view>
-  
-  <view class="btn" bindtap="goToAbout">前往关于页面</view>
-  <view class="btn" bindtap="testLocalServer">测试本地服务器</view>
-  
-  <view class="text" wx:if="{{serverResponse}}">
-    服务器响应: {{serverResponse}}
+<view class="home-container">
+  <!-- 标题栏 -->
+  <view class="header">
+    <text class="home-title">🏠 我的温馨小家</text>
+  </view>
+
+  <!-- 漫画风格房间 -->
+  <view class="room">
+    <!-- 地板 -->
+    <view class="floor"></view>
+    
+    <!-- 墙壁装饰 -->
+    <view class="wall-decoration left-decor">🌿</view>
+    <view class="wall-decoration right-decor">🌸</view>
+    
+    <!-- 衣柜区域 -->
+    <view class="furniture wardrobe" bindtap="openWardrobe" animation="{{wardrobeAnimation}}">
+      <view class="furniture-top">🚪</view>
+      <view class="furniture-body">
+        <view class="door left-door">
+          <text class="door-text">衣柜</text>
+        </view>
+        <view class="door right-door">
+          <text class="handle">|</text>
+        </view>
+      </view>
+      <view class="furniture-label">点我查看 👆</view>
+    </view>
+
+    <!-- 冰箱区域 -->
+    <view class="furniture fridge" bindtap="openFridge" animation="{{fridgeAnimation}}">
+      <view class="fridge-top">❄️</view>
+      <view class="fridge-body">
+        <view class="fridge-door upper-door">
+          <text class="fridge-text">冰箱</text>
+          <text class="handle">—</text>
+        </view>
+        <view class="fridge-door lower-door">
+          <text class="handle">—</text>
+        </view>
+      </view>
+      <view class="furniture-label">点我查看 👆</view>
+    </view>
+
+    <!-- 小桌子装饰 -->
+    <view class="table">
+      <text class="table-text">🪴</text>
+    </view>
+
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-hint">
+    <text class="hint-text">点击家具查看里面的宝贝~</text>
+  </view>
+
+  <!-- 衣柜内容弹窗 -->
+  <view class="modal-mask" wx:if="{{showWardrobeModal}}" bindtap="closeWardrobeModal">
+    <view class="modal-content wardrobe-modal" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">👗 我的衣柜</text>
+        <text class="modal-close" bindtap="closeWardrobeModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <view class="item-grid">
+          <view class="item" wx:for="{{wardrobeItems}}" wx:key="id">
+            <text class="item-icon">{{item.icon}}</text>
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-count">{{item.count}}件</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 冰箱内容弹窗 -->
+  <view class="modal-mask" wx:if="{{showFridgeModal}}" bindtap="closeFridgeModal">
+    <view class="modal-content fridge-modal" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">🧊 我的冰箱</text>
+        <text class="modal-close" bindtap="closeFridgeModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <view class="item-grid">
+          <view class="item" wx:for="{{fridgeItems}}" wx:key="id">
+            <text class="item-icon">{{item.icon}}</text>
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-count">{{item.count}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

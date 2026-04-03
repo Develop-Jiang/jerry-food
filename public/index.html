@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 我的温馨小家</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #FFF5E6 0%, #FFE4E1 50%, #E6F3FF 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .home-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 标题栏 */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .home-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FF6B9D;
+            text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.3);
+        }
+
+        /* 房间容器 */
+        .room {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(to bottom, #FFF8DC 0%, #F5DEB3 100%);
+            border-radius: 30px;
+            border: 8px solid #DEB887;
+            box-shadow: 
+                inset 0 0 60px rgba(139, 69, 19, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        /* 地板 */
+        .floor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: linear-gradient(to bottom, #D2691E 0%, #A0522D 100%);
+            opacity: 0.3;
+        }
+
+        /* 墙壁装饰 */
+        .wall-decoration {
+            position: absolute;
+            font-size: 50px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .left-decor {
+            top: 30px;
+            left: 30px;
+        }
+
+        .right-decor {
+            top: 30px;
+            right: 30px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 家具通用样式 */
+        .furniture {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .furniture:hover {
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .furniture:active {
+            transform: scale(0.95);
+        }
+
+        .furniture-label {
+            text-align: center;
+            font-size: 18px;
+            color: #FF69B4;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* 衣柜样式 */
+        .wardrobe {
+            top: 120px;
+            left: 80px;
+            width: 220px;
+            height: 320px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: 6px solid #654321;
+        }
+
+        .furniture-top {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .furniture-body {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            gap: 10px;
+        }
+
+        .door {
+            flex: 1;
+            background: linear-gradient(135deg, #CD853F 0%, #DEB887 100%);
+            border-radius: 12px;
+            border: 4px solid #8B4513;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .door-text {
+            font-size: 28px;
+            color: #654321;
+            font-weight: bold;
+        }
+
+        .handle {
+            position: absolute;
+            right: 12px;
+            font-size: 32px;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        /* 冰箱样式 */
+        .fridge {
+            top: 140px;
+            right: 80px;
+            width: 200px;
+            height: 300px;
+            background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 100%);
+            border: 6px solid #4682B4;
+        }
+
+        .fridge-body {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .fridge-door {
+            flex: 1;
+            background: linear-gradient(135deg, #ADD8E6 0%, #E0FFFF 100%);
+            border-radius: 10px;
+            border: 3px solid #4682B4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .upper-door {
+            flex: 1.2;
+        }
+
+        .lower-door {
+            flex: 1;
+        }
+
+        .fridge-text {
+            font-size: 24px;
+            color: #4682B4;
+            font-weight: bold;
+        }
+
+        /* 小桌子装饰 */
+        .table {
+            position: absolute;
+            bottom: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #DEB887 0%, #D2691E 100%);
+            border-radius: 50px;
+            border: 5px solid #8B4513;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-text {
+            font-size: 48px;
+        }
+
+        /* 底部提示 */
+        .footer-hint {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .hint-text {
+            font-size: 24px;
+            color: #FF69B4;
+            font-weight: bold;
+        }
+
+        /* 弹窗遮罩 */
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal-mask.show {
+            display: flex;
+        }
+
+        /* 弹窗内容 */
+        .modal-content {
+            width: 90%;
+            max-width: 500px;
+            max-height: 70vh;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideUp 0.3s ease-out;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
+            border-bottom: 4px solid #FF1493;
+        }
+
+        .modal-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-close {
+            font-size: 36px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* 物品网格 */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .item {
+            background: linear-gradient(135deg, #FFF8DC 0%, #FFEFD5 100%);
+            border-radius: 16px;
+            padding: 20px 10px;
+            text-align: center;
+            border: 3px solid #FFD700;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .item-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .item-name {
+            font-size: 22px;
+            color: #333;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .item-count {
+            font-size: 18px;
+            color: #FF69B4;
+            font-weight: bold;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .room {
+                height: 500px;
+            }
+            
+            .wardrobe {
+                width: 180px;
+                height: 260px;
+                left: 40px;
+                top: 100px;
+            }
+            
+            .fridge {
+                width: 160px;
+                height: 240px;
+                right: 40px;
+                top: 120px;
+            }
+            
+            .home-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="home-container">
+        <!-- 标题栏 -->
+        <div class="header">
+            <h1 class="home-title">🏠 我的温馨小家</h1>
+        </div>
+
+        <!-- 漫画风格房间 -->
+        <div class="room">
+            <!-- 地板 -->
+            <div class="floor"></div>
+            
+            <!-- 墙壁装饰 -->
+            <div class="wall-decoration left-decor">🌿</div>
+            <div class="wall-decoration right-decor">🌸</div>
+            
+            <!-- 衣柜区域 -->
+            <div class="furniture wardrobe" onclick="openWardrobe()">
+                <div class="furniture-top">🚪</div>
+                <div class="furniture-body">
+                    <div class="door">
+                        <span class="door-text">衣柜</span>
+                    </div>
+                    <div class="door">
+                        <span class="handle">|</span>
+                    </div>
+                </div>
+                <div class="furniture-label">点我查看 👆</div>
+            </div>
+
+            <!-- 冰箱区域 -->
+            <div class="furniture fridge" onclick="openFridge()">
+                <div class="fridge-top">❄️</div>
+                <div class="fridge-body">
+                    <div class="fridge-door upper-door">
+                        <span class="fridge-text">冰箱</span>
+                        <span class="handle">—</span>
+                    </div>
+                    <div class="fridge-door lower-door">
+                        <span class="handle">—</span>
+                    </div>
+                </div>
+                <div class="furniture-label">点我查看 👆</div>
+            </div>
+
+            <!-- 小桌子装饰 -->
+            <div class="table">
+                <span class="table-text">🪴</span>
+            </div>
+        </div>
+
+        <!-- 底部提示 -->
+        <div class="footer-hint">
+            <p class="hint-text">点击家具查看里面的宝贝~</p>
+        </div>
+    </div>
+
+    <!-- 衣柜内容弹窗 -->
+    <div class="modal-mask" id="wardrobeModal" onclick="closeWardrobe()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">👗 我的衣柜</h2>
+                <button class="modal-close" onclick="closeWardrobe()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="item-grid">
+                    <div class="item">
+                        <span class="item-icon">👔</span>
+                        <span class="item-name">衬衫</span>
+                        <span class="item-count">5件</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">👕</span>
+                        <span class="item-name">T恤</span>
+                        <span class="item-count">8件</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">🧥</span>
+                        <span class="item-name">外套</span>
+                        <span class="item-count">3件</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">👖</span>
+                        <span class="item-name">牛仔裤</span>
+                        <span class="item-count">4件</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">👗</span>
+                        <span class="item-name">连衣裙</span>
+                        <span class="item-count">6件</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">🧣</span>
+                        <span class="item-name">围巾</span>
+                        <span class="item-count">2件</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 冰箱内容弹窗 -->
+    <div class="modal-mask" id="fridgeModal" onclick="closeFridge()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">🧊 我的冰箱</h2>
+                <button class="modal-close" onclick="closeFridge()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="item-grid">
+                    <div class="item">
+                        <span class="item-icon">🥛</span>
+                        <span class="item-name">牛奶</span>
+                        <span class="item-count">2盒</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">🥚</span>
+                        <span class="item-name">鸡蛋</span>
+                        <span class="item-count">12个</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">🍎</span>
+                        <span class="item-name">苹果</span>
+                        <span class="item-count">5个</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">🥬</span>
+                        <span class="item-name">蔬菜</span>
+                        <span class="item-count">3份</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">🍖</span>
+                        <span class="item-name">肉类</span>
+                        <span class="item-count">1份</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-icon">🧊</span>
+                        <span class="item-name">冰块</span>
+                        <span class="item-count">20块</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openWardrobe() {
+            document.getElementById('wardrobeModal').classList.add('show');
+        }
+
+        function closeWardrobe() {
+            document.getElementById('wardrobeModal').classList.remove('show');
+        }
+
+        function openFridge() {
+            document.getElementById('fridgeModal').classList.add('show');
+        }
+
+        function closeFridge() {
+            document.getElementById('fridgeModal').classList.remove('show');
+        }
+
+        // ESC键关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeWardrobe();
+                closeFridge();
+            }
+        });
+    </script>
+</body>
+</html>
