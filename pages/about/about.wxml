@@ -1,0 +1,8 @@
+<view class="container">
+  <view class="title">关于 Jerry Food</view>
+  <view class="text">这是一个微信小程序的基础框架示例</view>
+  <view class="text">用于演示如何在本地部署和访问微信小程序</view>
+  <view class="text">版本: 1.0.0</view>
+  
+  <view class="btn" bindtap="goBack">返回首页</view>
+</view>

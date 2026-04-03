@@ -1,0 +1,12 @@
+<view class="container">
+  <view class="title">欢迎使用 Jerry Food</view>
+  <view class="text">这是一个微信小程序的基础框架</view>
+  <view class="text">你可以通过本地服务器访问并在手机上查看</view>
+  
+  <view class="btn" bindtap="goToAbout">前往关于页面</view>
+  <view class="btn" bindtap="testLocalServer">测试本地服务器</view>
+  
+  <view class="text" wx:if="{{serverResponse}}">
+    服务器响应: {{serverResponse}}
+  </view>
+</view>
