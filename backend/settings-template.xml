@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Maven settings.xml 配置模板
+  使用方法：将此文件复制到 C:\Users\{你的用户名}\.m2\settings.xml
+  或者修改你现有的 settings.xml
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 
+          http://maven.apache.org/xsd/settings-1.2.0.xsd">
+
+    <!-- 本地仓库路径（可选，默认为 ~/.m2/repository） -->
+    <localRepository>D:/maven_repository</localRepository>
+
+    <!-- 镜像配置 - 使用阿里云加速 -->
+    <mirrors>
+        <!-- 阿里云公共仓库镜像（推荐） -->
+        <mirror>
+            <id>aliyunmaven</id>
+            <mirrorOf>*</mirrorOf>
+            <name>阿里云公共仓库</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </mirror>
+        
+        <!-- 备选：华为云镜像 -->
+        <!--
+        <mirror>
+            <id>huaweicloud</id>
+            <mirrorOf>*</mirrorOf>
+            <name>华为云镜像</name>
+            <url>https://repo.huaweicloud.com/repository/maven/</url>
+        </mirror>
+        -->
+        
+        <!-- 备选：腾讯云镜像 -->
+        <!--
+        <mirror>
+            <id>nexus-tencentyun</id>
+            <mirrorOf>*</mirrorOf>
+            <name>Nexus tencentyun</name>
+            <url>https://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+        </mirror>
+        -->
+    </mirrors>
+
+    <!-- Profile 配置 -->
+    <profiles>
+        <profile>
+            <id>jdk-1.8</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+            </properties>
+        </profile>
+    </profiles>
+
+</settings>
